@@ -11,10 +11,10 @@ This project is built for learning purposes and demonstrates a full telemetry pi
 OpenXDR builds a simple but realistic security monitoring pipeline:
 
 
-Windows Agent → gRPC → MacBook Server
+endpoint Agent → gRPC → admin Server
 
 
-The system collects process-level telemetry from a Windows machine and streams it in real time to a central ingestion server.
+The system collects process-level telemetry from a endpoint machine (preferable windows) and streams it in real time to a central ingestion server.
 
 ---
 
