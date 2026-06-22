@@ -72,7 +72,7 @@ func main() {
 
 		processes := getProcesses()
 
-		payload := strings.Join(processes[:min(len(processes), 10)], ",")
+		payload := strings.Join(processes[:min(len(processes), 15)], ",")
 
 		event := &pb.Event{
 			AgentId:   agentID,
