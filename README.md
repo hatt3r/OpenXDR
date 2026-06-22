@@ -59,7 +59,7 @@ Instead of building dashboards or UI first, OpenXDR focuses on the **core of all
 
 # 📁 Project Structure
 
-
+```
 openxdr/
 ├── agent/ # Windows endpoint agent
 ├── server/ # MacBook ingestion server
@@ -67,7 +67,7 @@ openxdr/
 ├── internal/logger/ # structured logging system
 ├── go.mod
 └── README.md
-
+```
 
 ---
 
