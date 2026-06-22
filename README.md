@@ -26,7 +26,7 @@ Instead of building dashboards or UI first, OpenXDR focuses on the **core of all
 
 # 🏗️ Architecture
 
-
+```
 ┌──────────────────────────────┐
 │ Windows Laptop (Agent) │
 │ │
@@ -43,7 +43,7 @@ Instead of building dashboards or UI first, OpenXDR focuses on the **core of all
 │ - Event Logger (Zap) │
 │ - In-memory Storage │
 └──────────────────────────────┘
-
+```
 
 ---
 
