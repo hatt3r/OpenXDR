@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package telemetry;
+
+// CHANGE THIS IF YOUR MODULE IS DIFFERENT
+option go_package = "openxdr/proto;proto";
+
+service TelemetryService {
+  rpc SendEvent (Event) returns (Ack);
+}
+
+message Event {
+  string agent_id = 1;
+  string hostname = 2;
+  string event_type = 3;
+  string payload = 4;
+  string timestamp = 5;
+}
+
+message Ack {
+  bool success = 1;
+}
