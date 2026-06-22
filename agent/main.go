@@ -50,7 +50,7 @@ func getProcesses() []string {
 
 func main() {
 
-	serverAddr := "192.168.1.10:50051" // CHANGE THIS
+	serverAddr := "192.168.1.173:50051" // CHANGE THIS
 
 	conn, err := grpc.Dial(
 		serverAddr,
