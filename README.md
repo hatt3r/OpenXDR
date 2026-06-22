@@ -94,14 +94,14 @@ message Event {
 ```
 
 ▶️ How to Run
-1. Start Server (MacBook)
-```go run server/main.go```
-2. Run Agent (Windows)
 
 Update server IP in agent:
 
-```serverAddr := "YOUR_MACBOOK_IP:50051"```
+```serverAddr := "YOUR_dev_server_IP:50051"```
 
-Then run:
+1. Start Server 
+```go run server/main.go```
+
+2. Run Agent on endpoirnt
 
 ```go run agent/main.go```
