@@ -97,6 +97,118 @@ func (x *Event) GetTimestamp() string {
 	return ""
 }
 
+type AgentInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AgentId       string                 `protobuf:"bytes,1,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty"`
+	Hostname      string                 `protobuf:"bytes,2,opt,name=hostname,proto3" json:"hostname,omitempty"`
+	Os            string                 `protobuf:"bytes,3,opt,name=os,proto3" json:"os,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AgentInfo) Reset() {
+	*x = AgentInfo{}
+	mi := &file_proto_telemetry_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AgentInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AgentInfo) ProtoMessage() {}
+
+func (x *AgentInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_telemetry_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AgentInfo.ProtoReflect.Descriptor instead.
+func (*AgentInfo) Descriptor() ([]byte, []int) {
+	return file_proto_telemetry_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *AgentInfo) GetAgentId() string {
+	if x != nil {
+		return x.AgentId
+	}
+	return ""
+}
+
+func (x *AgentInfo) GetHostname() string {
+	if x != nil {
+		return x.Hostname
+	}
+	return ""
+}
+
+func (x *AgentInfo) GetOs() string {
+	if x != nil {
+		return x.Os
+	}
+	return ""
+}
+
+type HeartbeatRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AgentId       string                 `protobuf:"bytes,1,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty"`
+	Timestamp     string                 `protobuf:"bytes,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HeartbeatRequest) Reset() {
+	*x = HeartbeatRequest{}
+	mi := &file_proto_telemetry_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HeartbeatRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HeartbeatRequest) ProtoMessage() {}
+
+func (x *HeartbeatRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_telemetry_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HeartbeatRequest.ProtoReflect.Descriptor instead.
+func (*HeartbeatRequest) Descriptor() ([]byte, []int) {
+	return file_proto_telemetry_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *HeartbeatRequest) GetAgentId() string {
+	if x != nil {
+		return x.AgentId
+	}
+	return ""
+}
+
+func (x *HeartbeatRequest) GetTimestamp() string {
+	if x != nil {
+		return x.Timestamp
+	}
+	return ""
+}
+
 type Ack struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
@@ -106,7 +218,7 @@ type Ack struct {
 
 func (x *Ack) Reset() {
 	*x = Ack{}
-	mi := &file_proto_telemetry_proto_msgTypes[1]
+	mi := &file_proto_telemetry_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -118,7 +230,7 @@ func (x *Ack) String() string {
 func (*Ack) ProtoMessage() {}
 
 func (x *Ack) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_telemetry_proto_msgTypes[1]
+	mi := &file_proto_telemetry_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -131,7 +243,7 @@ func (x *Ack) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Ack.ProtoReflect.Descriptor instead.
 func (*Ack) Descriptor() ([]byte, []int) {
-	return file_proto_telemetry_proto_rawDescGZIP(), []int{1}
+	return file_proto_telemetry_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *Ack) GetSuccess() bool {
@@ -152,11 +264,20 @@ const file_proto_telemetry_proto_rawDesc = "" +
 	"\n" +
 	"event_type\x18\x03 \x01(\tR\teventType\x12\x18\n" +
 	"\apayload\x18\x04 \x01(\tR\apayload\x12\x1c\n" +
-	"\ttimestamp\x18\x05 \x01(\tR\ttimestamp\"\x1f\n" +
+	"\ttimestamp\x18\x05 \x01(\tR\ttimestamp\"R\n" +
+	"\tAgentInfo\x12\x19\n" +
+	"\bagent_id\x18\x01 \x01(\tR\aagentId\x12\x1a\n" +
+	"\bhostname\x18\x02 \x01(\tR\bhostname\x12\x0e\n" +
+	"\x02os\x18\x03 \x01(\tR\x02os\"K\n" +
+	"\x10HeartbeatRequest\x12\x19\n" +
+	"\bagent_id\x18\x01 \x01(\tR\aagentId\x12\x1c\n" +
+	"\ttimestamp\x18\x02 \x01(\tR\ttimestamp\"\x1f\n" +
 	"\x03Ack\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess2A\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess2\xb2\x01\n" +
 	"\x10TelemetryService\x12-\n" +
-	"\tSendEvent\x12\x10.telemetry.Event\x1a\x0e.telemetry.AckB\x15Z\x13openxdr/proto;protob\x06proto3"
+	"\tSendEvent\x12\x10.telemetry.Event\x1a\x0e.telemetry.Ack\x125\n" +
+	"\rRegisterAgent\x12\x14.telemetry.AgentInfo\x1a\x0e.telemetry.Ack\x128\n" +
+	"\tHeartbeat\x12\x1b.telemetry.HeartbeatRequest\x1a\x0e.telemetry.AckB\x15Z\x13openxdr/proto;protob\x06proto3"
 
 var (
 	file_proto_telemetry_proto_rawDescOnce sync.Once
@@ -170,16 +291,22 @@ func file_proto_telemetry_proto_rawDescGZIP() []byte {
 	return file_proto_telemetry_proto_rawDescData
 }
 
-var file_proto_telemetry_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_telemetry_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_telemetry_proto_goTypes = []any{
-	(*Event)(nil), // 0: telemetry.Event
-	(*Ack)(nil),   // 1: telemetry.Ack
+	(*Event)(nil),            // 0: telemetry.Event
+	(*AgentInfo)(nil),        // 1: telemetry.AgentInfo
+	(*HeartbeatRequest)(nil), // 2: telemetry.HeartbeatRequest
+	(*Ack)(nil),              // 3: telemetry.Ack
 }
 var file_proto_telemetry_proto_depIdxs = []int32{
 	0, // 0: telemetry.TelemetryService.SendEvent:input_type -> telemetry.Event
-	1, // 1: telemetry.TelemetryService.SendEvent:output_type -> telemetry.Ack
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	1, // 1: telemetry.TelemetryService.RegisterAgent:input_type -> telemetry.AgentInfo
+	2, // 2: telemetry.TelemetryService.Heartbeat:input_type -> telemetry.HeartbeatRequest
+	3, // 3: telemetry.TelemetryService.SendEvent:output_type -> telemetry.Ack
+	3, // 4: telemetry.TelemetryService.RegisterAgent:output_type -> telemetry.Ack
+	3, // 5: telemetry.TelemetryService.Heartbeat:output_type -> telemetry.Ack
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -196,7 +323,7 @@ func file_proto_telemetry_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_telemetry_proto_rawDesc), len(file_proto_telemetry_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

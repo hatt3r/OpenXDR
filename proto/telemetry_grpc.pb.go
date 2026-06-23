@@ -19,14 +19,21 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TelemetryService_SendEvent_FullMethodName = "/telemetry.TelemetryService/SendEvent"
+	TelemetryService_SendEvent_FullMethodName     = "/telemetry.TelemetryService/SendEvent"
+	TelemetryService_RegisterAgent_FullMethodName = "/telemetry.TelemetryService/RegisterAgent"
+	TelemetryService_Heartbeat_FullMethodName     = "/telemetry.TelemetryService/Heartbeat"
 )
 
 // TelemetryServiceClient is the client API for TelemetryService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TelemetryServiceClient interface {
+	// existing telemetry
 	SendEvent(ctx context.Context, in *Event, opts ...grpc.CallOption) (*Ack, error)
+	// NEW: agent registers itself once
+	RegisterAgent(ctx context.Context, in *AgentInfo, opts ...grpc.CallOption) (*Ack, error)
+	// NEW: heartbeat ping
+	Heartbeat(ctx context.Context, in *HeartbeatRequest, opts ...grpc.CallOption) (*Ack, error)
 }
 
 type telemetryServiceClient struct {
@@ -47,11 +54,36 @@ func (c *telemetryServiceClient) SendEvent(ctx context.Context, in *Event, opts 
 	return out, nil
 }
 
+func (c *telemetryServiceClient) RegisterAgent(ctx context.Context, in *AgentInfo, opts ...grpc.CallOption) (*Ack, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Ack)
+	err := c.cc.Invoke(ctx, TelemetryService_RegisterAgent_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *telemetryServiceClient) Heartbeat(ctx context.Context, in *HeartbeatRequest, opts ...grpc.CallOption) (*Ack, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Ack)
+	err := c.cc.Invoke(ctx, TelemetryService_Heartbeat_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TelemetryServiceServer is the server API for TelemetryService service.
 // All implementations must embed UnimplementedTelemetryServiceServer
 // for forward compatibility.
 type TelemetryServiceServer interface {
+	// existing telemetry
 	SendEvent(context.Context, *Event) (*Ack, error)
+	// NEW: agent registers itself once
+	RegisterAgent(context.Context, *AgentInfo) (*Ack, error)
+	// NEW: heartbeat ping
+	Heartbeat(context.Context, *HeartbeatRequest) (*Ack, error)
 	mustEmbedUnimplementedTelemetryServiceServer()
 }
 
@@ -64,6 +96,12 @@ type UnimplementedTelemetryServiceServer struct{}
 
 func (UnimplementedTelemetryServiceServer) SendEvent(context.Context, *Event) (*Ack, error) {
 	return nil, status.Error(codes.Unimplemented, "method SendEvent not implemented")
+}
+func (UnimplementedTelemetryServiceServer) RegisterAgent(context.Context, *AgentInfo) (*Ack, error) {
+	return nil, status.Error(codes.Unimplemented, "method RegisterAgent not implemented")
+}
+func (UnimplementedTelemetryServiceServer) Heartbeat(context.Context, *HeartbeatRequest) (*Ack, error) {
+	return nil, status.Error(codes.Unimplemented, "method Heartbeat not implemented")
 }
 func (UnimplementedTelemetryServiceServer) mustEmbedUnimplementedTelemetryServiceServer() {}
 func (UnimplementedTelemetryServiceServer) testEmbeddedByValue()                          {}
@@ -104,6 +142,42 @@ func _TelemetryService_SendEvent_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TelemetryService_RegisterAgent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AgentInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TelemetryServiceServer).RegisterAgent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TelemetryService_RegisterAgent_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TelemetryServiceServer).RegisterAgent(ctx, req.(*AgentInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TelemetryService_Heartbeat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HeartbeatRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TelemetryServiceServer).Heartbeat(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TelemetryService_Heartbeat_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TelemetryServiceServer).Heartbeat(ctx, req.(*HeartbeatRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TelemetryService_ServiceDesc is the grpc.ServiceDesc for TelemetryService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +188,14 @@ var TelemetryService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SendEvent",
 			Handler:    _TelemetryService_SendEvent_Handler,
+		},
+		{
+			MethodName: "RegisterAgent",
+			Handler:    _TelemetryService_RegisterAgent_Handler,
+		},
+		{
+			MethodName: "Heartbeat",
+			Handler:    _TelemetryService_Heartbeat_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

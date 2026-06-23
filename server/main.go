@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"net"
+	"time"
 
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -12,6 +13,42 @@ import (
 
 	"openxdr/internal/detection"
 )
+
+type Agent struct {
+	AgentID  string
+	Hostname string
+	LastSeen string
+	Status   string
+}
+
+var agents = map[string]*Agent{}
+
+func (s *Server) RegisterAgent(ctx context.Context, a *pb.AgentInfo) (*pb.Ack, error) {
+	agents[a.AgentId] = &Agent{
+		AgentID:  a.AgentId,
+		Hostname: a.Hostname,
+		LastSeen: time.Now().Format(time.RFC3339),
+		Status:   "Online",
+	}
+	logger.Log.Info("Agent registered",
+		zap.String("agent_id", a.AgentId),
+		zap.String("hostname", a.Hostname),
+	)
+	return &pb.Ack{Success: true}, nil
+}
+func (s *Server) Heartbeat(ctx context.Context, h *pb.HeartbeatRequest) (*pb.Ack, error) {
+
+	if agent, ok := agents[h.AgentId]; ok {
+		agent.LastSeen = time.Now().Format(time.RFC3339)
+		agent.Status = "ONLINE"
+	}
+
+	logger.Log.Info("heartbeat received",
+		zap.String("agent_id", h.AgentId),
+	)
+
+	return &pb.Ack{Success: true}, nil
+}
 
 type Server struct {
 	pb.UnimplementedTelemetryServiceServer

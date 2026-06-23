@@ -2,11 +2,18 @@ syntax = "proto3";
 
 package telemetry;
 
-// CHANGE THIS IF YOUR MODULE IS DIFFERENT
 option go_package = "openxdr/proto;proto";
 
 service TelemetryService {
+
+  // existing telemetry
   rpc SendEvent (Event) returns (Ack);
+
+  // NEW: agent registers itself once
+  rpc RegisterAgent (AgentInfo) returns (Ack);
+
+  // NEW: heartbeat ping
+  rpc Heartbeat (HeartbeatRequest) returns (Ack);
 }
 
 message Event {
@@ -15,6 +22,17 @@ message Event {
   string event_type = 3;
   string payload = 4;
   string timestamp = 5;
+}
+
+message AgentInfo {
+  string agent_id = 1;
+  string hostname = 2;
+  string os = 3;
+}
+
+message HeartbeatRequest {
+  string agent_id = 1;
+  string timestamp = 2;
 }
 
 message Ack {

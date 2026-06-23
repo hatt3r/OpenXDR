@@ -50,7 +50,7 @@ func getProcesses() []string {
 
 func main() {
 
-	serverAddr := "192.168.1.173:50051" // CHANGE THIS
+	serverAddr := "192.168.1.173:50051"
 
 	conn, err := grpc.Dial(
 		serverAddr,
@@ -66,14 +66,39 @@ func main() {
 	agentID := "A001"
 	hostname := "WIN-LAPTOP"
 
+	_, err = client.RegisterAgent(context.Background(), &pb.AgentInfo{
+		AgentId:  agentID,
+		Hostname: hostname,
+		Os:       "windows",
+	})
+	if err != nil {
+		fmt.Println("register error:", err)
+	}
+
+	go func() {
+		for {
+			_, err := client.Heartbeat(context.Background(), &pb.HeartbeatRequest{
+				AgentId:   agentID,
+				Timestamp: time.Now().Format(time.RFC3339),
+			})
+
+			if err != nil {
+				fmt.Println("heartbeat error:", err)
+			}
+			time.Sleep(10 * time.Second)
+		}
+	}()
+
 	fmt.Println("OpenXDR Agent started (REAL MODE)")
 
 	for {
 
-		// processes := getProcesses()
+		processes := getProcesses()
+		if len(processes) > 50 {
+			processes = processes[:50]
+		}
+		payload := strings.Join(processes, ",")
 
-		// payload := strings.Join(processes[:min(len(processes), 15)], ",")
-		payload := "chrome.exe,mimikatz.exe"
 		event := &pb.Event{
 			AgentId:   agentID,
 			Hostname:  hostname,
@@ -91,11 +116,4 @@ func main() {
 
 		time.Sleep(5 * time.Second)
 	}
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
 }
