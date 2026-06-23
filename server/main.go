@@ -9,6 +9,8 @@ import (
 
 	"openxdr/internal/logger"
 	pb "openxdr/proto"
+
+	"openxdr/internal/detection"
 )
 
 type Server struct {
@@ -30,6 +32,17 @@ func (s *Server) SendEvent(
 		zap.String("timestamp", e.Timestamp),
 	)
 
+	alerts := detection.CheckProcesses(e.Payload)
+
+	for _, alert := range alerts {
+
+		logger.Log.Warn(
+			"ALERT GENERATED",
+			zap.String("title", alert.Title),
+			zap.String("severity", alert.Severity),
+			zap.String("description", alert.Description),
+		)
+	}
 	// Store in memory (temporary Phase 1 storage)
 	s.events = append(s.events, *e)
 

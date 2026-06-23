@@ -70,10 +70,10 @@ func main() {
 
 	for {
 
-		processes := getProcesses()
+		// processes := getProcesses()
 
-		payload := strings.Join(processes[:min(len(processes), 15)], ",")
-
+		// payload := strings.Join(processes[:min(len(processes), 15)], ",")
+		payload := "chrome.exe,mimikatz.exe"
 		event := &pb.Event{
 			AgentId:   agentID,
 			Hostname:  hostname,
