@@ -5,6 +5,8 @@ OpenXDR is an open-source, Go-based experimental Extended Detection and Response
 This project is built for learning purposes and demonstrates a full telemetry pipeline using gRPC between a Windows endpoint agent and a MacBook-based central server.
 
 while this is in the nascent stage, it is a stepping stone for later stages.
+
+
 ---
 
 # 🎯 What This Project Does
