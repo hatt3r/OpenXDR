@@ -11,10 +11,10 @@ This project is built for learning purposes and demonstrates a full telemetry pi
 OpenXDR builds a simple but realistic security monitoring pipeline:
 
 
-Windows Agent → gRPC → MacBook Server
+endpoint Agent → gRPC → admin Server
 
 
-The system collects process-level telemetry from a Windows machine and streams it in real time to a central ingestion server.
+The system collects process-level telemetry from a endpoint machine (preferable windows) and streams it in real time to a central ingestion server.
 
 ---
 
@@ -28,16 +28,18 @@ Instead of building dashboards or UI first, OpenXDR focuses on the **core of all
 
 ```
 ┌──────────────────────────────┐
-│ Windows Laptop (Agent) │
+│ endpoint Laptop (Agent) │
 │ │
 │ - Process Collector │
 │ - gRPC Client │
 │ - Telemetry Sender │
 └──────────────┬───────────────┘
+
 │ gRPC :50051
 ▼
-┌──────────────────────────────┐
-│ MacBook Server (SOC Core) │
+
+┌──────────────┘────────────────┐
+│ admin Server (SOC Core) │
 │ │
 │ - gRPC Server │
 │ - Event Logger (Zap) │
@@ -61,8 +63,8 @@ Instead of building dashboards or UI first, OpenXDR focuses on the **core of all
 
 ```
 openxdr/
-├── agent/ # Windows endpoint agent
-├── server/ # MacBook ingestion server
+├── agent/ #  endpoint agent
+├── server/ #  ingestion server
 ├── proto/ # gRPC contract (telemetry definition)
 ├── internal/logger/ # structured logging system
 ├── go.mod
@@ -73,25 +75,12 @@ openxdr/
 
 # 📡 Telemetry Flow
 
-1. Windows agent collects running processes
+1. endpoint agent collects running processes
 2. Data is packaged into an Event
 3. Event is sent via gRPC every 5 seconds
-4. MacBook server receives and logs the event
+4. admin server receives and logs the event
 
 ---
-
-# 📦 Event Schema
-
-proto
-```
-message Event {
-  string agent_id = 1;
-  string hostname = 2;
-  string event_type = 3;
-  string payload = 4;
-  string timestamp = 5;
-}
-```
 
 ▶️ How to Run
 
