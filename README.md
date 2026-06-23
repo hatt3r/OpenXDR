@@ -91,7 +91,8 @@ Update server IP in agent:
 
 ```serverAddr := "YOUR_dev_server_IP:50051"```
 
-1. Start Server 
+1. Start Server
+
 ```go run server/main.go```
 
 2. Run Agent on endpoirnt
