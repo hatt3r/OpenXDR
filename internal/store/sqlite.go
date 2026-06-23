@@ -11,7 +11,7 @@ type Store struct {
 	DB *sql.DB
 }
 
-// -------------------- INIT --------------------
+//initialize
 
 func New(dbPath string) *Store {
 
@@ -26,7 +26,7 @@ func New(dbPath string) *Store {
 	return s
 }
 
-// -------------------- SCHEMA --------------------
+// database schema init
 
 func (s *Store) init() {
 
