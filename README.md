@@ -1,9 +1,10 @@
-# 🛡️ OpenXDR
+## 🛡️ OpenXDR (currently in phase 1)
 
 OpenXDR is an open-source, Go-based experimental Extended Detection and Response (XDR) system designed to simulate how modern security platforms collect, transmit, and process endpoint telemetry.
 
 This project is built for learning purposes and demonstrates a full telemetry pipeline using gRPC between a Windows endpoint agent and a MacBook-based central server.
 
+while this is in the nascent stage, it is a stepping stone for later stages.
 ---
 
 # 🎯 What This Project Does
@@ -82,7 +83,7 @@ openxdr/
 
 ---
 
-▶️ How to Run
+# ▶️ How to Run
 
 Update server IP in agent:
 
