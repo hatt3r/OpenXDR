@@ -13,15 +13,27 @@ func Health(c *gin.Context) {
 }
 
 func getEvents(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Get events endpoint",
-	})
+	events, err := DB.GetEvents()
+	if err != nil {
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{"error": err.Error()},
+		)
+		return
+	}
+	c.JSON(http.StatusOK, events)
 }
 
 func getAlerts(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Get alerts endpoint",
-	})
+	alerts, err := DB.GetAlerts()
+	if err != nil {
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{"error": err.Error()},
+		)
+		return
+	}
+	c.JSON(http.StatusOK, alerts)
 }
 
 func getAgents(c *gin.Context) {
