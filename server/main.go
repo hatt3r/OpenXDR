@@ -149,7 +149,7 @@ func main() {
 	})
 
 	logger.Log.Info("OpenXDR Server started on :50051")
-	router := api.SetupRouter()
+	router := api.SetupRouter(dbStore)
 	go func() {
 		if err := router.Run(":8080"); err != nil {
 			panic(err)

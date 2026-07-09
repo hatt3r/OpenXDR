@@ -25,7 +25,13 @@ func getAlerts(c *gin.Context) {
 }
 
 func getAgents(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Get agents endpoint",
-	})
+	agents, err := DB.GetAgents()
+	if err != nil {
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{"error": err.Error()},
+		)
+		return
+	}
+	c.JSON(http.StatusOK, agents)
 }
