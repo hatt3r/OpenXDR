@@ -3,15 +3,15 @@ package main
 import (
 	"context"
 	"net"
-	"time"
-
-	"go.uber.org/zap"
-	"google.golang.org/grpc"
-
+	api "openxdr/api"
 	"openxdr/internal/detection"
 	"openxdr/internal/logger"
 	"openxdr/internal/store"
 	pb "openxdr/proto"
+	"time"
+
+	"go.uber.org/zap"
+	"google.golang.org/grpc"
 )
 
 type Agent struct {
@@ -134,6 +134,7 @@ func main() {
 
 	//initialize database
 	dbStore = store.New("openxdr.db")
+	api.Init(dbStore)
 
 	// gRPC server
 	lis, err := net.Listen("tcp", ":50051")
@@ -148,7 +149,12 @@ func main() {
 	})
 
 	logger.Log.Info("OpenXDR Server started on :50051")
-
+	router := api.SetupRouter()
+	go func() {
+		if err := router.Run(":8080"); err != nil {
+			panic(err)
+		}
+	}()
 	// ready? start server
 	if err := grpcServer.Serve(lis); err != nil {
 		panic(err)

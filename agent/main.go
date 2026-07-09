@@ -52,7 +52,7 @@ func main() {
 
 	serverAddr := "192.168.1.173:50051"
 
-	conn, err := grpc.Dial(
+	conn, err := grpc.NewClient(
 		serverAddr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
