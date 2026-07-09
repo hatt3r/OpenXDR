@@ -97,8 +97,8 @@ func main() {
 		if len(processes) > 50 {
 			processes = processes[:50]
 		}
-		//payload := strings.Join(processes, ",")
-		payload := "chrome.exe,mimikatz.exe"
+		payload := strings.Join(processes, ",")
+		// payload := "chrome.exe,mimikatz.exe"
 		event := &pb.Event{
 			AgentId:   agentID,
 			Hostname:  hostname,
