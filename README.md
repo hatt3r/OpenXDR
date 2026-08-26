@@ -46,7 +46,12 @@ Instead of building dashboards or UI first, OpenXDR focuses on the **core of all
 │ │
 │ - gRPC Server │
 │ - Event Logger (Zap) │
-│ - In-memory Storage │
+│ - SQLite
+| - Detection Engine
+| - REST API
+| - Agent Registration
+| - Heartbeat
+| - Alerts
 └──────────────────────────────┘
 ```
 
