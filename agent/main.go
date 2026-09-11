@@ -63,13 +63,24 @@ func main() {
 
 	client := pb.NewTelemetryServiceClient(conn)
 
+	OSCmd, err := exec.Command("ver").Output()
+	if err != nil {
+		fmt.Println("error getting OS version:", err)
+	}
+
+	hostnameCmd, err := exec.Command("hostname").Output()
+	if err != nil {
+		fmt.Println("error getting hostname:", err)
+	}
+
 	agentID := "A001"
-	hostname := "WIN-LAPTOP"
+	OSstring := strings.TrimSpace(string(OSCmd))
+	hostnameString := strings.TrimSpace(string(hostnameCmd))
 
 	_, err = client.RegisterAgent(context.Background(), &pb.AgentInfo{
 		AgentId:  agentID,
-		Hostname: hostname,
-		Os:       "windows",
+		Hostname: hostnameString,
+		Os:       OSstring, //"windows",
 	})
 	if err != nil {
 		fmt.Println("register error:", err)
@@ -101,7 +112,7 @@ func main() {
 		// payload := "chrome.exe,mimikatz.exe"
 		event := &pb.Event{
 			AgentId:   agentID,
-			Hostname:  hostname,
+			Hostname:  hostnameString,
 			EventType: "process_list",
 			Payload:   payload,
 			Timestamp: time.Now().Format(time.RFC3339),
