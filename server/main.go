@@ -224,27 +224,29 @@ func (s *Server) SendEvent(
 		"success",
 	).Inc()
 
-	// Detection engine
-	alerts := detection.CheckProcesses(e.Payload)
+	// Detection engine: only process telemetry should be evaluated for
+	// suspicious-process rules, and empty payloads produce no alerts.
+	if e.EventType == "process_list" && e.Payload != "" {
+		alerts := detection.CheckProcesses(e.Payload)
 
-	for _, alert := range alerts {
+		for _, alert := range alerts {
 
-		// Prometheus alert metric
-		metrics.AlertsGenerated.WithLabelValues(
-			alert.Title,
-			alert.Severity,
-		).Inc()
+			// Prometheus alert metric
+			metrics.AlertsGenerated.WithLabelValues(
+				alert.Title,
+				alert.Severity,
+			).Inc()
 
-		logger.Log.Warn(
-			"ALERT GENERATED",
-			zap.String("agent_id", e.AgentId),
-			zap.String("title", alert.Title),
-			zap.String("severity", alert.Severity),
-			zap.String("description", alert.Description),
-		)
+			logger.Log.Warn(
+				"ALERT GENERATED",
+				zap.String("agent_id", e.AgentId),
+				zap.String("title", alert.Title),
+				zap.String("severity", alert.Severity),
+				zap.String("description", alert.Description),
+			)
 
-		// Store alert in database
-		_, err := dbStore.DB.Exec(`
+			// Store alert in database
+			_, err := dbStore.DB.Exec(`
 			INSERT INTO alerts(
 				agent_id,
 				title,
@@ -254,19 +256,20 @@ func (s *Server) SendEvent(
 			)
 			VALUES (?, ?, ?, ?, ?)
 		`,
-			e.AgentId,
-			alert.Title,
-			alert.Severity,
-			alert.Description,
-			time.Now().Format(time.RFC3339),
-		)
-
-		if err != nil {
-			logger.Log.Error(
-				"failed to store alert",
-				zap.String("agent_id", e.AgentId),
-				zap.Error(err),
+				e.AgentId,
+				alert.Title,
+				alert.Severity,
+				alert.Description,
+				time.Now().Format(time.RFC3339),
 			)
+
+			if err != nil {
+				logger.Log.Error(
+					"failed to store alert",
+					zap.String("agent_id", e.AgentId),
+					zap.Error(err),
+				)
+			}
 		}
 	}
 
