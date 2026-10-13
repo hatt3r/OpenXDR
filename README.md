@@ -192,7 +192,3 @@ For a Linux agent binary, cross-compile from macOS or another platform:
 ```bash
 GOOS=linux GOARCH=amd64 go build -o agent/agent_linux ./agent
 ```
-```
-
-Check trailing fenced code? I accidentally included triple backticks at end after code block? Let's review: last line "```" closes block, then extra "```" maybe from my heredoc? Let's inspect.<|end|><|start|> byteArray? Let's just read.<|end|><|start|><|start|>assistant to=shell<|channel|>analysis <|constrain|>xml<|message|><rfl:parameter name="command">
-cd /Users/serene/Documents/OpenXDR && tail -20 README.md
