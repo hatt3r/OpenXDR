@@ -6,6 +6,7 @@ PROJECT_DIR="$HOME/Documents/OpenXDR"
 PROMETHEUS_CONFIG="$PROJECT_DIR/prometheus/prometheus.yml"
 AGENT_DIR="$PROJECT_DIR/agent"
 AGENT_OUTPUT="$AGENT_DIR/agent.exe"
+AGENT_LINUX_OUTPUT="$AGENT_DIR/agent_linux"
 SERVER_BIN="$PROJECT_DIR/server/openxdr-server"
 SERVER_LOG="$PROJECT_DIR/server/server.log"
 PROMETHEUS_LOG="$PROJECT_DIR/prometheus/prometheus.log"
@@ -33,6 +34,24 @@ GOOS=windows GOARCH=amd64 go build -o "$AGENT_OUTPUT" ./agent
 
 echo "Windows agent built successfully:"
 echo "$AGENT_OUTPUT"
+echo ""
+
+# ----------------------------------
+# 1b. Build Linux Agent
+# ----------------------------------
+
+echo "Building Linux agent..."
+
+rm -f "$AGENT_LINUX_OUTPUT" "$AGENT_DIR/agent" "$AGENT_DIR/agent_linux_amd64"
+
+GOOS=linux GOARCH=amd64 go build -o "$AGENT_LINUX_OUTPUT" ./agent
+cp "$AGENT_LINUX_OUTPUT" "$AGENT_DIR/agent"
+cp "$AGENT_LINUX_OUTPUT" "$AGENT_DIR/agent_linux_amd64"
+
+echo "Linux agent built successfully:"
+echo "$AGENT_LINUX_OUTPUT"
+echo "$AGENT_DIR/agent"
+echo "$AGENT_DIR/agent_linux_amd64"
 echo ""
 
 # ----------------------------------

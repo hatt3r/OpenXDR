@@ -111,6 +111,7 @@ chmod +x startopenxdr.sh stopopenxdr.sh
 The script:
 
 - Cross-compiles the Windows agent to `agent/agent.exe` (`GOOS=windows GOARCH=amd64`).
+- Cross-compiles the Linux agent to `agent/agent_linux` (`GOOS=linux GOARCH=amd64`).
 - Builds the server into `server/openxdr-server`.
 - Starts Grafana.
 - Starts Prometheus with `prometheus/prometheus.yml`.
@@ -185,3 +186,13 @@ For a Windows agent binary, cross-compile from macOS or Linux:
 ```bash
 GOOS=windows GOARCH=amd64 go build -o agent/agent.exe ./agent
 ```
+
+For a Linux agent binary, cross-compile from macOS or another platform:
+
+```bash
+GOOS=linux GOARCH=amd64 go build -o agent/agent_linux ./agent
+```
+```
+
+Check trailing fenced code? I accidentally included triple backticks at end after code block? Let's review: last line "```" closes block, then extra "```" maybe from my heredoc? Let's inspect.<|end|><|start|> byteArray? Let's just read.<|end|><|start|><|start|>assistant to=shell<|channel|>analysis <|constrain|>xml<|message|><rfl:parameter name="command">
+cd /Users/serene/Documents/OpenXDR && tail -20 README.md
