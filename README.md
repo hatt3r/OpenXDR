@@ -133,7 +133,7 @@ The script:
 | Events | http://localhost:8080/events |
 | Alerts | http://localhost:8080/alerts |
 | Metrics | http://localhost:8080/metrics |
-| gRPC server | localhost:50051 |
+| gRPC server | http://localhost:50051 |
 | Prometheus | http://localhost:9090 |
 | Grafana | http://localhost:3000 |
 
