@@ -181,6 +181,20 @@ Run the agent on an endpoint:
 go run ./agent
 ```
 
+Run the prebuilt Linux 64-bit agent:
+
+```bash
+chmod +x agent/agent_linux_amd64
+./agent/agent_linux_amd64
+```
+
+If the binary was copied from another machine, make it executable first:
+
+```bash
+chmod +x agent_linux_amd64
+./agent_linux_amd64
+```
+
 For a Windows agent binary, cross-compile from macOS or Linux:
 
 ```bash
