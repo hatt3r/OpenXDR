@@ -30,7 +30,7 @@ echo "[1/5] Building Windows agent..."
 
 rm -f "$AGENT_OUTPUT"
 
-GOOS=windows GOARCH=amd64 go build -o "$AGENT_OUTPUT" ./agent
+CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o "$AGENT_OUTPUT" ./agent
 
 echo "Windows agent built successfully:"
 echo "$AGENT_OUTPUT"
@@ -44,7 +44,7 @@ echo "Building Linux agent..."
 
 rm -f "$AGENT_LINUX_OUTPUT" "$AGENT_DIR/agent" "$AGENT_DIR/agent_linux_amd64"
 
-GOOS=linux GOARCH=amd64 go build -o "$AGENT_LINUX_OUTPUT" ./agent
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o "$AGENT_LINUX_OUTPUT" ./agent
 cp "$AGENT_LINUX_OUTPUT" "$AGENT_DIR/agent"
 cp "$AGENT_LINUX_OUTPUT" "$AGENT_DIR/agent_linux_amd64"
 

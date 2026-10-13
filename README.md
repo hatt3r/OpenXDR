@@ -198,11 +198,11 @@ chmod +x agent_linux_amd64
 For a Windows agent binary, cross-compile from macOS or Linux:
 
 ```bash
-GOOS=windows GOARCH=amd64 go build -o agent/agent.exe ./agent
+CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o agent/agent.exe ./agent
 ```
 
 For a Linux agent binary, cross-compile from macOS or another platform:
 
 ```bash
-GOOS=linux GOARCH=amd64 go build -o agent/agent_linux ./agent
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o agent/agent_linux ./agent
 ```
