@@ -4,7 +4,9 @@ import (
 	"bufio"
 	"context"
 	"fmt"
+	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 	"time"
 
@@ -15,9 +17,16 @@ import (
 )
 
 func getProcesses() []string {
+	var cmd *exec.Cmd
 
-	// Windows command to list processes
-	cmd := exec.Command("tasklist")
+	// Choose a process-listing command that is available on the current OS.
+	switch runtime.GOOS {
+	case "windows":
+		cmd = exec.Command("tasklist")
+	default:
+		// "comm=" prints only the process name with no header on Unix systems.
+		cmd = exec.Command("ps", "-eo", "comm=")
+	}
 
 	out, err := cmd.Output()
 	if err != nil {
@@ -29,23 +38,65 @@ func getProcesses() []string {
 	processes := []string{}
 
 	for scanner.Scan() {
-		line := scanner.Text()
-
-		// Skip header lines
-		if strings.Contains(line, "Image Name") ||
-			strings.Contains(line, "===") ||
-			len(line) < 10 {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" {
 			continue
 		}
 
-		// Extract process name (first column)
-		fields := strings.Fields(line)
-		if len(fields) > 0 {
-			processes = append(processes, fields[0])
+		switch runtime.GOOS {
+		case "windows":
+			// Skip tasklist header lines.
+			if strings.Contains(line, "Image Name") ||
+				strings.Contains(line, "===") {
+				continue
+			}
+
+			// Extract the process name from the first column.
+			fields := strings.Fields(line)
+			if len(fields) > 0 {
+				processes = append(processes, fields[0])
+			}
+		default:
+			processes = append(processes, line)
 		}
 	}
 
 	return processes
+}
+
+// operatingSystem returns a human-readable OS string in a cross-platform way.
+func operatingSystem() string {
+	switch runtime.GOOS {
+	case "windows":
+		if out, err := exec.Command("cmd", "/C", "ver").Output(); err == nil {
+			if s := strings.TrimSpace(string(out)); s != "" {
+				return s
+			}
+		}
+	default:
+		if out, err := exec.Command("uname", "-sr").Output(); err == nil {
+			if s := strings.TrimSpace(string(out)); s != "" {
+				return s
+			}
+		}
+	}
+
+	return runtime.GOOS + "/" + runtime.GOARCH
+}
+
+// hostName returns the machine hostname without depending on shell utilities.
+func hostName() string {
+	if name, err := os.Hostname(); err == nil && name != "" {
+		return name
+	}
+
+	if out, err := exec.Command("hostname").Output(); err == nil {
+		if s := strings.TrimSpace(string(out)); s != "" {
+			return s
+		}
+	}
+
+	return "unknown"
 }
 
 func main() {
@@ -63,24 +114,15 @@ func main() {
 
 	client := pb.NewTelemetryServiceClient(conn)
 
-	OSCmd, err := exec.Command("ver").Output()
-	if err != nil {
-		fmt.Println("error getting OS version:", err)
-	}
-
-	hostnameCmd, err := exec.Command("hostname").Output()
-	if err != nil {
-		fmt.Println("error getting hostname:", err)
-	}
+	OSstring := operatingSystem()
+	hostnameString := hostName()
 
 	agentID := "A001"
-	OSstring := strings.TrimSpace(string(OSCmd))
-	hostnameString := strings.TrimSpace(string(hostnameCmd))
 
 	_, err = client.RegisterAgent(context.Background(), &pb.AgentInfo{
 		AgentId:  agentID,
 		Hostname: hostnameString,
-		Os:       OSstring, //"windows",
+		Os:       OSstring,
 	})
 	if err != nil {
 		fmt.Println("register error:", err)
