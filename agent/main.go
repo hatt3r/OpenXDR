@@ -101,7 +101,7 @@ func hostName() string {
 
 func main() {
 
-	serverAddr := "192.168.1.25:50051"
+	serverAddr := "192.168.1.58:50051"
 
 	conn, err := grpc.NewClient(
 		serverAddr,
