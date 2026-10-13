@@ -185,4 +185,3 @@ For a Windows agent binary, cross-compile from macOS or Linux:
 ```bash
 GOOS=windows GOARCH=amd64 go build -o agent/agent.exe ./agent
 ```
-```
