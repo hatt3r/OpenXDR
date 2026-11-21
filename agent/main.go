@@ -101,7 +101,10 @@ func hostName() string {
 
 func main() {
 
-	serverAddr := "192.168.1.58:50051"
+	serverAddr := os.Getenv("OPENXDR_SERVER_ADDR")
+	if serverAddr == "" {
+		serverAddr = "localhost:50051"
+	}
 
 	conn, err := grpc.NewClient(
 		serverAddr,
@@ -117,7 +120,11 @@ func main() {
 	OSstring := operatingSystem()
 	hostnameString := hostName()
 
-	agentID := "A001"
+	agentID := os.Getenv("OPENXDR_AGENT_ID")
+	if agentID == "" {
+		agentID = hostnameString
+		fmt.Println("OPENXDR_AGENT_ID not set; using hostname as agent ID. Set a unique ID for multi-agent deployments.")
+	}
 
 	_, err = client.RegisterAgent(context.Background(), &pb.AgentInfo{
 		AgentId:  agentID,
