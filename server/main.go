@@ -170,7 +170,7 @@ func (s *Server) SendEvent(
 		zap.String("agent_id", e.AgentId),
 		zap.String("hostname", e.Hostname),
 		zap.String("event_type", e.EventType),
-		zap.String("payload", e.Payload),
+		// Do not log telemetry payloads: they may contain sensitive endpoint data.
 		zap.String("timestamp", e.Timestamp),
 	)
 
